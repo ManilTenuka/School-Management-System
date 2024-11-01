@@ -1,8 +1,7 @@
-const db = require('../config/db'); // Import the database connection
+const db = require('../config/db'); 
 
-// Controller function to get all students
 exports.getAllStudents = (req, res) => {
-    const query = 'SELECT * FROM students'; // SQL query to get all students
+    const query = 'SELECT * FROM students'; 
 
     db.query(query, (err, results) => {
         if (err) {
