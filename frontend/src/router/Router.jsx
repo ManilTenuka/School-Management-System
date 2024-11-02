@@ -9,6 +9,7 @@ import Student from '../pages/Student';
 import ManageTeachers from '../pages/ManageTeachers';
 import Teacher from '../pages/Teacher';
 import ManageCourse from '../pages/ManageCourse';
+import Course from '../pages/Course';
 
 
 const Router = createBrowserRouter([
@@ -39,6 +40,10 @@ const Router = createBrowserRouter([
       {
         path:"manageCourses",
         element:<ManageCourse/>
+      },
+      {
+        path:"course/:courseId",
+        element:<Course/>
       }
     ]
   }

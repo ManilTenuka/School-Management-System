@@ -28,6 +28,8 @@ const ManageTeachers = () => {
           setError('Failed to fetch teachers');
         });
 
+        
+
         setChanged(false)
     }, [changed]);
   
