@@ -6,23 +6,39 @@ import ManageStudents from '../pages/ManageStudents';
 import AdminDashboard from '../pages/AdminDashboard';
 import AdminLayout from '../components/AdminLayout';
 import Student from '../pages/Student';
+import ManageTeachers from '../pages/ManageTeachers';
+import Teacher from '../pages/Teacher';
+import ManageCourse from '../pages/ManageCourse';
+
 
 const Router = createBrowserRouter([
   {
     path: "/admin",
-    element: <AdminLayout/>, // Admin layout with NavigationBar and nested routes
+    element: <AdminLayout/>, 
     children: [
       {
-        path: "adminDashboard", // Maps to /admin/adminDashboard
+        path: "adminDashboard", 
         element: <AdminDashboard />
       },
       {
-        path: "manageStudents", // Maps to /admin/manageStudents
+        path: "manageStudents", 
         element: <ManageStudents />
       },
       {
-        path: "student/:studentId", // Maps to /admin/viewStudent/:studentId
-        element: <Student/>// Component that displays the student's details
+        path: "student/:studentId", 
+        element: <Student/>
+      },
+      {
+        path: "manageTeachers", 
+        element: <ManageTeachers/>
+      },
+      {
+        path: "teacher/:teacherId", 
+        element: <Teacher/>
+      },
+      {
+        path:"manageCourses",
+        element:<ManageCourse/>
       }
     ]
   }

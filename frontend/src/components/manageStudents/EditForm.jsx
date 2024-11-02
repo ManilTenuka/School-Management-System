@@ -24,18 +24,17 @@ const EditForm = ({onClose , student}) => {
     const [isErrorGender, setIsErrorGender] = useState(false);
     const [isErrorAddress, setIsErrorAddress] = useState(false);
 
-    const [profileImage, setProfileImage] = useState(null); // New state for profile image preview
+    const [profileImage, setProfileImage] = useState(null); 
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setProfileImage(URL.createObjectURL(file)); // Update the preview with selected image
+            setProfileImage(URL.createObjectURL(file));
         }
     };
 
 
     const handleSubmit = async (e) => {
-         // New state for profile image preview
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -96,15 +95,14 @@ const EditForm = ({onClose , student}) => {
         console.log('Student Data:', studentData);
       
         try {
-          const response = await axios.post('http://localhost:3001/admin/createStudent', studentData);
-          console.log('Student created:', response.data);
+            const response = await axios.put(`http://localhost:3001/admin/updateStudent/${student.id}`, studentData);
+            console.log('Student updated:', response.data);
+            onClose(); 
+          } catch (error) {
+            console.error('Error updating student:', error);
+          }
+        };
       
-          onClose();
-        } catch (error) {
-          console.error('Error creating student:', error);
-        }
-        
-      };
 
   
   return (

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { useState } from 'react';
 import axios from 'axios';
-const StudentForm = ({onClose , onChange}) => {
+const TeacherForm = ({onClose , onChange}) => {
 
     const getTodayDate = () => { 
         const today = new Date();
@@ -18,7 +18,7 @@ const StudentForm = ({onClose , onChange}) => {
     const [birthday, setBirthday] = useState('');
     const [gender, setGender] = useState('');
     const [address, setAddress] = useState('');
-    const [birthCertificate, setBirthCertificate] = useState(null);
+    
     
    
     const [isErrorFirstName, setIsErrorFirstName] = useState(false);
@@ -49,13 +49,13 @@ const StudentForm = ({onClose , onChange}) => {
         e.preventDefault();
       
         
-        const studentData = {
+        const TeacherData = {
           firstName,
           lastName,
           birthday,
           gender,
           address,
-          birthCertificate: birthCertificate 
+          
         };
         if (!firstName) {
             setIsErrorFirstName(true);
@@ -96,11 +96,11 @@ const StudentForm = ({onClose , onChange}) => {
             return
           }
       
-        console.log('Student Data:', studentData);
+       
       
         try {
-          const response = await axios.post('http://localhost:3001/admin/createStudent', studentData);
-          console.log('Student created:', response.data);
+          const response = await axios.post('http://localhost:3001/admin/createTeacher', TeacherData);
+          
           onChange();
           onClose();
         } catch (error) {
@@ -128,7 +128,7 @@ const StudentForm = ({onClose , onChange}) => {
 
       <form onSubmit={handleSubmit} className="relative mt-12 p-3 mb-10  hide-scrollbar">
         <div className="flex flex-col mb-5">
-          <h1 className="flex justify-center text-3xl">Student Registration Form</h1>
+          <h1 className="flex justify-center text-3xl">Teacher Registration Form</h1>
         </div>
         
 
@@ -207,14 +207,7 @@ const StudentForm = ({onClose , onChange}) => {
              )}
           </div>
 
-          <div className="flex flex-col gap-3 col-span-2">
-            <label>Birth Certificate Document</label>
-            <input
-              type="file"
-              className="input-field"
-              onChange={(e) => setBirthCertificate(e.target.files[0])}
-            />
-          </div>
+         
 
         
         </div>
@@ -230,4 +223,4 @@ const StudentForm = ({onClose , onChange}) => {
 );
 }
 
-export default StudentForm
+export default TeacherForm

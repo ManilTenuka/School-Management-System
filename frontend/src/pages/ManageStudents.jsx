@@ -49,6 +49,20 @@ const ManageStudents = () => {
 
 
     }
+
+    const calculateAge = (birthday) => {
+      const birthDate = new Date(birthday);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDifference = today.getMonth() - birthDate.getMonth();
+      
+      
+      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+      }
+      return age;
+  };
+
   return (
    
     <div className="flex flex-col justify-center py-4 items-center gap-5">
@@ -69,7 +83,7 @@ const ManageStudents = () => {
         
         </div>
         {isModalOpen && (
-            <StudentForm onClose={() => setModelOpen(false)} />
+            <StudentForm onClose={() => setModelOpen(false)} onChange = {()=> {setChanged(true)}} />
           )}
         {isEditFormOpen[0] && (
           <EditForm onClose={() => setEditFormOpen([false,null])} student = {isEditFormOpen[1]} />
@@ -79,7 +93,7 @@ const ManageStudents = () => {
         <div>
         <table className="min-w-full bg-white border border-gray-300">
             <thead>
-                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal ">
                 
                 <th className="py-2 px-4 border-b">Student ID</th>
                 <th className="py-2 px-4 border-b"> Name</th>
@@ -92,47 +106,34 @@ const ManageStudents = () => {
                 </tr>
             </thead>
             <tbody className="text-gray-700 text-sm">
-              {students.map((student,index)=>(
-                    <tr key={index} className="border-b hover:bg-gray-100">
-                        <td className="py-2 px-4">{student.id}</td>
-                        <td className="py-2 px-4">{student.first_name} {student.last_name}</td>
-                        
-                        <td className="py-2 px-4">{student.birthday}</td>
-                       
-                        <td className="py-2 px-4">{student.gender}</td>
-                      
-                        <td className="py-2 px-4">{student.enrollment_date}</td>
-                        <td className="py-2 px-4 text-blue-500 flex gap-2">
-                            <button onClick={()=>{
-                              setEditFormOpen([isEditFormOpen[0] == true ? false : true,student]);
-                            }}>  
-                            <FaEdit size={18} title="Edit" />
-                            </button>
-                            <button>
-                            <FaEye size={18} title="View" onClick={()=>{
-                               navigate(`/admin/student/${student.id}`)         
-                             }}/>
-                            </button>
-                            <button onClick={() => {
-                                    const confirmation = window.confirm("Do you really want to delete student ID: " + student.id + "?");
-                                    if (confirmation) {
-                                        handleDelete(student.id); // Corrected to use `student.id`
-                                    }
-                                    setChanged(true)
-                            }}>
-
-                            <FaTrash size={18} title="Delete" />
-                            </button>
-                        </td>
-                        </tr>
-                
-              )
-
-                
-              )}
-             
-            
+            {students.map((student, index) => (
+              <tr key={index} className="border-b hover:bg-gray-100">
+                <td className="py-2 px-4 text-center">{student.id}</td>
+                <td className="py-2 px-4 text-center">{student.first_name} {student.last_name}</td>
+                <td className="py-2 px-4 text-center">{calculateAge(student.birthday)}</td>
+                <td className="py-2 px-4 text-center">{student.gender}</td>
+                <td className="py-2 px-4 text-center">{student.enrollment_date.split('T')[0]}</td>
+                <td className="py-2 px-4 text-center text-blue-500 flex gap-2 justify-center">
+                  <button onClick={() => setEditFormOpen([isEditFormOpen[0] === true ? false : true, student])}>
+                    <FaEdit size={18} title="Edit" />
+                  </button>
+                  <button onClick={() => navigate(`/admin/student/${student.id}`)}>
+                    <FaEye size={18} title="View" />
+                  </button>
+                  <button onClick={() => {
+                    const confirmation = window.confirm("Do you really want to delete student ID: " + student.id + "?");
+                    if (confirmation) {
+                      handleDelete(student.id);
+                    }
+                    setChanged(true);
+                  }}>
+                    <FaTrash size={18} title="Delete" />
+                  </button>
+                </td>
+              </tr>
+            ))}
             </tbody>
+
         </table>
         </div>
        
