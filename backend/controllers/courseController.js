@@ -77,4 +77,25 @@ exports.deleteCourse = (req, res) => {
     });
 };
 
+exports.getCourseIdForTeacher = (req, res) => {
+    const teacherId = req.params.teacherId;
+
+    const query = `
+        SELECT course_id 
+        FROM teacher_courses 
+        WHERE teacher_id = ?`;
+
+    db.query(query, [teacherId], (err, results) => {
+        if (err) {
+            console.error('Error fetching courses for teacher:', err);
+            res.status(500).json({ error: 'Failed to retrieve courses for the teacher' });
+        } else if (results.length === 0) {
+            res.status(404).json({ message: 'No courses found for this teacher' });
+        } else {
+            res.status(200).json(results.map(result => result.course_id)); // Return only course IDs
+        }
+    });
+};
+
+
 
