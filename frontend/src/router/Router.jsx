@@ -5,6 +5,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import ManageStudents from '../pages/ManageStudents';
 import AdminDashboard from '../pages/AdminDashboard';
 import AdminLayout from '../components/AdminLayout';
+import Student from '../pages/Student';
 
 const Router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const Router = createBrowserRouter([
       {
         path: "manageStudents", // Maps to /admin/manageStudents
         element: <ManageStudents />
+      },
+      {
+        path: "student/:studentId", // Maps to /admin/viewStudent/:studentId
+        element: <Student/>// Component that displays the student's details
       }
     ]
   }
