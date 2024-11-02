@@ -2,11 +2,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaEdit, FaCopy, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaCopy, FaTrash , FaPlus , FaPen} from 'react-icons/fa';
+import Search from '../components/Search';
+import StudentForm from '../components/manageStudents/StudentForm';
+
 const ManageStudents = () => {
 
     const [students, setStudents] = useState([]);
     const [error, setError] = useState(null);
+
+    const [isModalOpen, setModelOpen] = useState(false);
   
     useEffect(() => {
       // Fetch students data from the backend
@@ -27,11 +32,28 @@ const ManageStudents = () => {
 
     console.log("students : " + students.student_id);
   return (
+   
     <div className="flex flex-col justify-center py-4 items-center gap-5">
         <div>
-        <h1 className="text-2xl font-semibold text-gray-800">Manage Students</h1>
+        <div className='mt-10 flex gap-12'>
+        <button className="flex flex-col items-center justify-center w-32 h-32  bg-blue-900 text-white rounded-md hover:bg-blue-700 transition duration-200" onClick={()=>{
 
+                 setModelOpen(isModalOpen==false?true:false)
+        }
+        }>
+            <FaPen size={24} /> 
+            <span className="mt-2 text-lg">Add Student</span>
+        </button>
+        <div className='flex items-center'>
+          <Search></Search>
         </div>
+        </div>
+        
+        </div>
+        { isModalOpen && (
+          <StudentForm onClose={() => setModelOpen(false)}/>
+        )
+        }
         <div>
         <table className="min-w-full bg-white border border-gray-300">
             <thead>

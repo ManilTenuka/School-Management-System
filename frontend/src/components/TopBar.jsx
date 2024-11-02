@@ -6,7 +6,7 @@ const TopBar = () => {
   return (
     <div className='relative flex justify-center'>
         <div>
-        <Search/>
+        <h1 className="text-2xl font-semibold text-gray-800">Manage Students</h1>
         </div>
      
         <div className="absolute right-10">
