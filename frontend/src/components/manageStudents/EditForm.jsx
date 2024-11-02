@@ -2,22 +2,19 @@ import React, { useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { useState } from 'react';
 import axios from 'axios';
-const StudentForm = ({onClose}) => {
+const EditForm = ({onClose , student}) => {
 
-    const getTodayDate = () => { 
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); 
-        const day = String(today.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+    const formatDate = (isoDate) => {
+        const date = new Date(isoDate);
+        return date.toISOString().split("T")[0]; // Extracts the "yyyy-MM-dd" part
       };
     
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [birthday, setBirthday] = useState('');
-    const [gender, setGender] = useState('');
-    const [address, setAddress] = useState('');
+    const [firstName, setFirstName] = useState(student.first_name);
+    const [lastName, setLastName] = useState(student.last_name);
+    const [birthday, setBirthday] = useState(formatDate(student.birthday));
+    const [gender, setGender] = useState(student.gender);
+    const [address, setAddress] = useState(student.address);
     const [birthCertificate, setBirthCertificate] = useState(null);
     
    
@@ -128,9 +125,9 @@ const StudentForm = ({onClose}) => {
 
       <form onSubmit={handleSubmit} className="relative mt-12 p-3 mb-10  hide-scrollbar">
         <div className="flex flex-col mb-5">
-          <h1 className="flex justify-center text-3xl">Student Registration Form</h1>
+          <h1 className="flex justify-center text-3xl">Edit Student</h1>
         </div>
-  
+        
 
         <div className="grid grid-cols-2 gap-6 border border-gray-300 rounded-md p-4">
           <div className="flex flex-col gap-3">
@@ -230,4 +227,4 @@ const StudentForm = ({onClose}) => {
 );
 }
 
-export default StudentForm
+export default EditForm

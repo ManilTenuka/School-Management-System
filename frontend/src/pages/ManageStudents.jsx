@@ -2,19 +2,22 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaEdit, FaCopy, FaTrash , FaPlus , FaPen} from 'react-icons/fa';
+import { FaEdit, FaCopy, FaTrash , FaPlus , FaPen , FaEye} from 'react-icons/fa';
 import Search from '../components/Search';
+import { useNavigate } from 'react-router-dom';
 import StudentForm from '../components/manageStudents/StudentForm';
+import EditForm from '../components/manageStudents/EditForm';
 
 const ManageStudents = () => {
-
+    const navigate = useNavigate();
     const [students, setStudents] = useState([]);
     const [error, setError] = useState(null);
 
     const [isModalOpen, setModelOpen] = useState(false);
-  
+    const [isEditFormOpen , setEditFormOpen] = useState([false,null]);
+    const [changed, setChanged] = useState(false);
     useEffect(() => {
-      // Fetch students data from the backend
+      
       axios.get('http://localhost:3001/admin/getAllStudents')
         .then((response) => {
           setStudents(response.data); 
@@ -24,13 +27,28 @@ const ManageStudents = () => {
           console.error('Error fetching students:', error);
           setError('Failed to fetch students');
         });
-    }, []);
+
+        setChanged(false)
+    }, [changed]);
   
     if (error) {
       return <div>Error: {error}</div>;
     }
 
     console.log("students : " + students.student_id);
+
+    const handleDelete = async(studentId)=>{
+
+      try {
+        const response = await axios.delete(`http://localhost:3001/admin/deleteStudent/${studentId}`);
+        console.log(response.data.message); 
+      
+      } catch (error) {
+          console.error('Error deleting student:', error);
+      }
+
+
+    }
   return (
    
     <div className="flex flex-col justify-center py-4 items-center gap-5">
@@ -50,18 +68,21 @@ const ManageStudents = () => {
         </div>
         
         </div>
-        { isModalOpen && (
-          <StudentForm onClose={() => setModelOpen(false)}/>
-        )
-        }
+        {isModalOpen && (
+            <StudentForm onClose={() => setModelOpen(false)} />
+          )}
+        {isEditFormOpen[0] && (
+          <EditForm onClose={() => setEditFormOpen([false,null])} student = {isEditFormOpen[1]} />
+        )}
+
+         
         <div>
         <table className="min-w-full bg-white border border-gray-300">
             <thead>
                 <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 
                 <th className="py-2 px-4 border-b">Student ID</th>
-                <th className="py-2 px-4 border-b">First Name</th>
-                <th className="py-2 px-4 border-b">Last Name</th>
+                <th className="py-2 px-4 border-b"> Name</th>
                 <th className="py-2 px-4 border-b">Age</th>
               
                 <th className="py-2 px-4 border-b">Gender</th>
@@ -73,22 +94,33 @@ const ManageStudents = () => {
             <tbody className="text-gray-700 text-sm">
               {students.map((student,index)=>(
                     <tr key={index} className="border-b hover:bg-gray-100">
-                        <td className="py-2 px-4">{student.student_id}</td>
-                        <td className="py-2 px-4">{student.first_name}</td>
-                        <td className="py-2 px-4">{student.last_name}</td>
-                        <td className="py-2 px-4">{student.age}</td>
+                        <td className="py-2 px-4">{student.id}</td>
+                        <td className="py-2 px-4">{student.first_name} {student.last_name}</td>
+                        
+                        <td className="py-2 px-4">{student.birthday}</td>
                        
                         <td className="py-2 px-4">{student.gender}</td>
                       
                         <td className="py-2 px-4">{student.enrollment_date}</td>
                         <td className="py-2 px-4 text-blue-500 flex gap-2">
-                            <button>  
+                            <button onClick={()=>{
+                              setEditFormOpen([isEditFormOpen[0] == true ? false : true,student]);
+                            }}>  
                             <FaEdit size={18} title="Edit" />
                             </button>
                             <button>
-                            <FaCopy size={18} title="Copy" />
+                            <FaEye size={18} title="View" onClick={()=>{
+                               navigate(`/admin/student/${student.id}`)         
+                             }}/>
                             </button>
-                            <button>
+                            <button onClick={() => {
+                                    const confirmation = window.confirm("Do you really want to delete student ID: " + student.id + "?");
+                                    if (confirmation) {
+                                        handleDelete(student.id); // Corrected to use `student.id`
+                                    }
+                                    setChanged(true)
+                            }}>
+
                             <FaTrash size={18} title="Delete" />
                             </button>
                         </td>
