@@ -4,13 +4,12 @@ import axios from 'axios';
 import { FaEdit, FaCopy, FaTrash , FaPlus , FaPen , FaEye} from 'react-icons/fa';
 import Search from '../components/Search';
 import { useNavigate } from 'react-router-dom';
-import EditForm from '../components/manageStudents/EditForm';
-import TeacherForm from '../components/manageTeacher/TeacherForm';
-import EditTeacherForm from '../components/manageTeacher/EditTeacherForm';
+import CourseForm from '../components/manageCourses/CourseForm';
+import EditCourseForm from '../components/manageCourses/EditCourseForm';
 
-const ManageTeachers = () => {
+const ManageCourse = () => {
     const navigate = useNavigate();
-    const [teachers, setTeachers] = useState([]);
+    const [courses, setCourses] = useState([]);
     const [error, setError] = useState(null);
 
     const [isModalOpen, setModelOpen] = useState(false);
@@ -18,14 +17,14 @@ const ManageTeachers = () => {
     const [changed, setChanged] = useState(false);
     useEffect(() => {
       
-      axios.get('http://localhost:3001/admin/getAllTeachers')
+      axios.get('http://localhost:3001/admin/getAllCourses')
         .then((response) => {
-          setTeachers(response.data); 
+          setCourses(response.data); 
           
         })
         .catch((error) => {
-          console.error('Error fetching teachers:', error);
-          setError('Failed to fetch teachers');
+          console.error('Error fetching courses:', error);
+          setError('Failed to fetch courses');
         });
 
         setChanged(false)
@@ -51,14 +50,14 @@ const ManageTeachers = () => {
 
    
 
-    const handleDelete = async(teacherId)=>{
+    const handleDelete = async(courseId)=>{
 
       try {
-        const response = await axios.delete(`http://localhost:3001/admin/deleteTeacher/${teacherId}`);
+        const response = await axios.delete(`http://localhost:3001/admin/deleteCourse/${courseId}`);
         console.log(response.data.message); 
       
       } catch (error) {
-          console.error('Error deleting Teacher:', error);
+          console.error('Error deleting Course:', error);
       }
 
 
@@ -74,7 +73,7 @@ const ManageTeachers = () => {
         }
         }>
             <FaPen size={24} /> 
-            <span className="mt-2 text-lg">Add Teacher</span>
+            <span className="mt-2 text-lg">Add Course</span>
         </button>
         <div className='flex items-center'>
           <Search></Search>
@@ -83,10 +82,10 @@ const ManageTeachers = () => {
         
         </div>
         {isModalOpen && (
-            <TeacherForm onClose={() => setModelOpen(false)} onChange = {()=>{setChanged(true)}} />
+            <CourseForm onClose={() => setModelOpen(false)} onChange={()=> setChanged(true)}/>
           )}
         {isEditFormOpen[0] && (
-          <EditTeacherForm onClose={() => setEditFormOpen([false,null])} teacher = {isEditFormOpen[1]} onChange = {()=>(setChanged(true))} />
+          <EditCourseForm onClose={() => setEditFormOpen([false,null])} course = {isEditFormOpen[1]} onChange={()=>setChanged(true)} />
         )}
 
          
@@ -95,41 +94,35 @@ const ManageTeachers = () => {
             <thead>
                 <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 
-                <th className="py-2 px-4 border-b">Teacher ID</th>
-                <th className="py-2 px-4 border-b"> Name</th>
-                <th className="py-2 px-4 border-b">Age</th>
-              
-                <th className="py-2 px-4 border-b">Gender</th>
-               
+                <th className="py-2 px-4 border-b">Course ID</th>
+                <th className="py-2 px-4 border-b">Course Name</th>
+                <th className="py-2 px-4 border-b">Course Description</th>
                 <th className="py-2 px-4 border-b">Actions</th>
                 </tr>
             </thead>
             <tbody className="text-gray-700 text-sm">
-              {teachers.map((teacher,index)=>(
-                    <tr key={index} className="border-b hover:bg-gray-100">
-                        <td className="flex py-2 px-4 justify-center">{teacher.teacher_id}</td>
-                        <td className="py-2 px-4">{teacher.first_name} {teacher.last_name}</td>
+              {courses.map((course,index)=>(
+                    <tr key={index} className="border-b hover:bg-gray-100 text-center">
+                        <td className="py-2 px-4 text-center ">{course.course_id}</td>
+                        <td className="py-2 px-4 text-center">{course.course_name}</td>
                         
-                        <td className="flex justify-center py-2 px-4">{calculateAge(teacher.birthday)}</td>
-                       
-                        <td className="py-2 px-4">{teacher.gender}</td>
-                      
+                        <td className=" py-2 px-4 max-w-xs break-words text-center">{course.course_description}</td>
                         
-                        <td className="py-2 px-4 text-blue-500 flex gap-2">
+                        <td className="py-2 px-4 text-blue-500 flex gap-2 text-center">
                             <button onClick={()=>{
-                              setEditFormOpen([isEditFormOpen[0] == true ? false : true,teacher]);
+                              setEditFormOpen([isEditFormOpen[0] == true ? false : true,course]);
                             }}>  
                             <FaEdit size={18} title="Edit" />
                             </button>
                             <button>
                             <FaEye size={18} title="View" onClick={()=>{
-                               navigate(`/admin/teacher/${teacher.id}`)         
+                               navigate(`/admin/course/${course.id}`)         
                              }}/>
                             </button>
                             <button onClick={() => {
-                                    const confirmation = window.confirm("Do you really want to delete teacher ID: " + teacher.teacher_id + "?");
+                                    const confirmation = window.confirm("Do you really want to delete course ID: " + course.course_id + "?");
                                     if (confirmation) {
-                                        handleDelete(teacher.teacher_id); 
+                                        handleDelete(course.course_id); 
                                     }
                                     setChanged(true)
                             }}>
@@ -154,4 +147,4 @@ const ManageTeachers = () => {
   );
 };
 
-export default ManageTeachers;
+export default ManageCourse;
