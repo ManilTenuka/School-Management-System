@@ -2,23 +2,19 @@ import React, { useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { useState } from 'react';
 import axios from 'axios';
-const TeacherForm = ({onClose , onChange}) => {
+const EditTeacherForm = ({onClose , teacher , onChange}) => {
 
-    const getTodayDate = () => { 
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); 
-        const day = String(today.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+    const formatDate = (isoDate) => {
+        const date = new Date(isoDate);
+        return date.toISOString().split("T")[0]; // Extracts the "yyyy-MM-dd" part
       };
     
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [birthday, setBirthday] = useState('');
-    const [gender, setGender] = useState('');
-    const [address, setAddress] = useState('');
-    
+    const [firstName, setFirstName] = useState(teacher.first_name);
+    const [lastName, setLastName] = useState(teacher.last_name);
+    const [birthday, setBirthday] = useState(formatDate(teacher.birthday));
+    const [gender, setGender] = useState(teacher.gender);
+    const [address, setAddress] = useState(teacher.address);
     
    
     const [isErrorFirstName, setIsErrorFirstName] = useState(false);
@@ -27,23 +23,22 @@ const TeacherForm = ({onClose , onChange}) => {
     const [isErrorGender, setIsErrorGender] = useState(false);
     const [isErrorAddress, setIsErrorAddress] = useState(false);
 
-    const [profileImage, setProfileImage] = useState(null); // New state for profile image preview
+    const [profileImage, setProfileImage] = useState(null); 
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setProfileImage(URL.createObjectURL(file)); // Update the preview with selected image
+            setProfileImage(URL.createObjectURL(file));
         }
     };
 
 
     const handleSubmit = async (e) => {
-         // New state for profile image preview
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setProfileImage(URL.createObjectURL(file)); // Update the preview with selected image
+            setProfileImage(URL.createObjectURL(file));
         }
     };
         e.preventDefault();
@@ -55,7 +50,7 @@ const TeacherForm = ({onClose , onChange}) => {
           birthday,
           gender,
           address,
-          
+         
         };
         if (!firstName) {
             setIsErrorFirstName(true);
@@ -99,15 +94,15 @@ const TeacherForm = ({onClose , onChange}) => {
        
       
         try {
-          const response = await axios.post('http://localhost:3001/admin/createTeacher', TeacherData);
-          
-          onChange();
-          onClose();
-        } catch (error) {
-          console.error('Error creating student:', error);
-        }
-        
-      };
+            const response = await axios.put(`http://localhost:3001/admin/updateTeacher/${teacher.teacher_id}`, TeacherData);
+            console.log('teacher updated:', response.data);
+            onChange();
+            onClose(); 
+          } catch (error) {
+            console.error('Error updating teacher:', error);
+          }
+        };
+      
 
   
   return (
@@ -128,7 +123,7 @@ const TeacherForm = ({onClose , onChange}) => {
 
       <form onSubmit={handleSubmit} className="relative mt-12 p-3 mb-10  hide-scrollbar">
         <div className="flex flex-col mb-5">
-          <h1 className="flex justify-center text-3xl">Teacher Registration Form</h1>
+          <h1 className="flex justify-center text-3xl">Edit Teacher</h1>
         </div>
         
 
@@ -163,18 +158,7 @@ const TeacherForm = ({onClose , onChange}) => {
             )}
           </div>
 
-          <div className="flex flex-col gap-3">
-            <label>Birthday</label>
-            <input
-              type="date"
-              className="input-field"
-              value={birthday}
-              onChange={(e) => setBirthday(e.target.value)}
-            />
-             {isErrorBirthday && (
-            <h1 className='text-red-600'>This field is mandatory</h1>
-                )}
-          </div>
+          
 
           <div className="flex flex-col gap-3">
             <label>Gender</label>
@@ -207,9 +191,6 @@ const TeacherForm = ({onClose , onChange}) => {
              )}
           </div>
 
-         
-
-        
         </div>
 
         <div className="absolute right-5 pt-3">
@@ -223,4 +204,4 @@ const TeacherForm = ({onClose , onChange}) => {
 );
 }
 
-export default TeacherForm
+export default EditTeacherForm

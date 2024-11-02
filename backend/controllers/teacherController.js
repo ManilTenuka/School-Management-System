@@ -46,3 +46,29 @@ exports.deleteTeacher = (req, res) => {
         }
     });
 };
+
+exports.updateTeacher = (req, res) => {
+    const teacherId = req.params.teacherId; 
+    const { firstName, lastName, birthday, address, gender} = req.body;
+
+  
+    const query = `
+        UPDATE teachers
+        SET first_name = ?, last_name = ?, birthday = ?, address = ?, gender = ?
+        WHERE teacher_id = ?`;
+
+  
+    const values = [firstName, lastName, birthday, address, gender , teacherId];
+
+    
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Error updating Teacher:', err);
+            res.status(500).json({ error: 'Failed to update Teacher' });
+        } else if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Teacher not found' });
+        } else {
+            res.status(200).json({ message: 'Teacher updated successfully' });
+        }
+    });
+};

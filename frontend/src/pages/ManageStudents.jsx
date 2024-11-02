@@ -83,7 +83,7 @@ const ManageStudents = () => {
         
         </div>
         {isModalOpen && (
-            <StudentForm onClose={() => setModelOpen(false)} />
+            <StudentForm onClose={() => setModelOpen(false)} onChange = {()=> {setChanged(true)}} />
           )}
         {isEditFormOpen[0] && (
           <EditForm onClose={() => setEditFormOpen([false,null])} student = {isEditFormOpen[1]} />

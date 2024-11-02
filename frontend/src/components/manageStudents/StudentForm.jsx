@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { useState } from 'react';
 import axios from 'axios';
-const StudentForm = ({onClose}) => {
+const StudentForm = ({onClose , onChange}) => {
 
     const getTodayDate = () => { 
         const today = new Date();
@@ -101,7 +101,7 @@ const StudentForm = ({onClose}) => {
         try {
           const response = await axios.post('http://localhost:3001/admin/createStudent', studentData);
           console.log('Student created:', response.data);
-      
+          onChange();
           onClose();
         } catch (error) {
           console.error('Error creating student:', error);
@@ -130,7 +130,7 @@ const StudentForm = ({onClose}) => {
         <div className="flex flex-col mb-5">
           <h1 className="flex justify-center text-3xl">Student Registration Form</h1>
         </div>
-  
+        
 
         <div className="grid grid-cols-2 gap-6 border border-gray-300 rounded-md p-4">
           <div className="flex flex-col gap-3">

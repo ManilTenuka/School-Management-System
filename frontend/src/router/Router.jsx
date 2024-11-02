@@ -8,6 +8,8 @@ import AdminLayout from '../components/AdminLayout';
 import Student from '../pages/Student';
 import ManageTeachers from '../pages/ManageTeachers';
 import Teacher from '../pages/Teacher';
+import ManageCourse from '../pages/ManageCourse';
+
 
 const Router = createBrowserRouter([
   {
@@ -33,6 +35,10 @@ const Router = createBrowserRouter([
       {
         path: "teacher/:teacherId", 
         element: <Teacher/>
+      },
+      {
+        path:"manageCourses",
+        element:<ManageCourse/>
       }
     ]
   }
