@@ -2,20 +2,23 @@ import React, { useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { useState } from 'react';
 import axios from 'axios';
-const EditForm = ({onClose , student}) => {
+const TeacherForm = ({onClose}) => {
 
-    const formatDate = (isoDate) => {
-        const date = new Date(isoDate);
-        return date.toISOString().split("T")[0]; // Extracts the "yyyy-MM-dd" part
+    const getTodayDate = () => { 
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); 
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
       };
     
 
-    const [firstName, setFirstName] = useState(student.first_name);
-    const [lastName, setLastName] = useState(student.last_name);
-    const [birthday, setBirthday] = useState(formatDate(student.birthday));
-    const [gender, setGender] = useState(student.gender);
-    const [address, setAddress] = useState(student.address);
-    const [birthCertificate, setBirthCertificate] = useState(null);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [birthday, setBirthday] = useState('');
+    const [gender, setGender] = useState('');
+    const [address, setAddress] = useState('');
+    
     
    
     const [isErrorFirstName, setIsErrorFirstName] = useState(false);
@@ -24,17 +27,18 @@ const EditForm = ({onClose , student}) => {
     const [isErrorGender, setIsErrorGender] = useState(false);
     const [isErrorAddress, setIsErrorAddress] = useState(false);
 
-    const [profileImage, setProfileImage] = useState(null); 
+    const [profileImage, setProfileImage] = useState(null); // New state for profile image preview
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setProfileImage(URL.createObjectURL(file));
+            setProfileImage(URL.createObjectURL(file)); // Update the preview with selected image
         }
     };
 
 
     const handleSubmit = async (e) => {
+         // New state for profile image preview
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -45,13 +49,13 @@ const EditForm = ({onClose , student}) => {
         e.preventDefault();
       
         
-        const studentData = {
+        const TeacherData = {
           firstName,
           lastName,
           birthday,
           gender,
           address,
-          birthCertificate: birthCertificate 
+          
         };
         if (!firstName) {
             setIsErrorFirstName(true);
@@ -92,17 +96,18 @@ const EditForm = ({onClose , student}) => {
             return
           }
       
-        console.log('Student Data:', studentData);
+       
       
         try {
-            const response = await axios.put(`http://localhost:3001/admin/updateStudent/${student.id}`, studentData);
-            console.log('Student updated:', response.data);
-            onClose(); 
-          } catch (error) {
-            console.error('Error updating student:', error);
-          }
-        };
+          const response = await axios.post('http://localhost:3001/admin/createTeacher', TeacherData);
+          
       
+          onClose();
+        } catch (error) {
+          console.error('Error creating student:', error);
+        }
+        
+      };
 
   
   return (
@@ -123,7 +128,7 @@ const EditForm = ({onClose , student}) => {
 
       <form onSubmit={handleSubmit} className="relative mt-12 p-3 mb-10  hide-scrollbar">
         <div className="flex flex-col mb-5">
-          <h1 className="flex justify-center text-3xl">Edit Student</h1>
+          <h1 className="flex justify-center text-3xl">Teacher Registration Form</h1>
         </div>
         
 
@@ -202,14 +207,7 @@ const EditForm = ({onClose , student}) => {
              )}
           </div>
 
-          <div className="flex flex-col gap-3 col-span-2">
-            <label>Birth Certificate Document</label>
-            <input
-              type="file"
-              className="input-field"
-              onChange={(e) => setBirthCertificate(e.target.files[0])}
-            />
-          </div>
+         
 
         
         </div>
@@ -225,4 +223,4 @@ const EditForm = ({onClose , student}) => {
 );
 }
 
-export default EditForm
+export default TeacherForm
