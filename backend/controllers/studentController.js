@@ -200,3 +200,27 @@ exports.createStudentCourseTable = (req, res) => {
     });
     
 };
+
+exports.getCoursesByStudentId = (req, res) => {
+    const studentId = req.params.studentId;
+
+    const query = `
+        SELECT courses.*
+        FROM courses
+        JOIN student_courses ON courses.course_id = student_courses.course_id
+        WHERE student_courses.student_id = ?;
+    `;
+
+    db.query(query, [studentId], (err, results) => {
+        if (err) {
+            console.error("Error fetching courses for the student:", err);
+            res.status(500).json({ error: "Failed to retrieve courses for the student" });
+        } else if (results.length === 0) {
+            res.status(200).json([]);
+        } else {
+            res.status(200).json(results);
+        }
+    });
+};
+
+

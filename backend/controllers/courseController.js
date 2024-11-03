@@ -1,6 +1,4 @@
 const db = require('../config/db'); 
-
-
 exports.getAllCourses = (req, res) => {
     const query = 'SELECT * FROM courses'; 
 

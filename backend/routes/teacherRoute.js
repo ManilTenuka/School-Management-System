@@ -9,6 +9,8 @@ router.put('/updateTeacher/:teacherId', teacherController.updateTeacher);
 router.get('/getCourseIdForTeacher/:teacherId', teacherController.getCourseIdForTeacher);
 router.delete('/deleteTeacherCourse', teacherController.deleteTeacherCourse);
 router.post('/createTeacherCourseTable',teacherController.CreateTeacherCourseTable);
+router.get('/getCoursesByTeacherId/:teacherId',teacherController.getCoursesByTeacherId);
+router.get('/getTeacherById/:teacherId',teacherController.getTeacherDetails);
 
 
 
