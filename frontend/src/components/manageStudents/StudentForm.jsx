@@ -224,14 +224,7 @@ const StudentForm = ({onClose , onChange}) => {
              )}
           </div>
 
-          <div className="flex flex-col gap-3 col-span-2">
-            <label>Birth Certificate Document</label>
-            <input
-              type="file"
-              className="input-field"
-              onChange={(e) => setBirthCertificate(e.target.files[0])}
-            />
-          </div>
+      
 
           <div className='flex  gap-3 col-span-2'>
             <div className="flex flex-col gap-3">

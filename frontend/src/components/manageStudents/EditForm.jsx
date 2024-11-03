@@ -276,50 +276,6 @@ const EditForm = ({onClose , student , onChange}) => {
            
             </div>
           
-
-          
-          <div className='flex  gap-3 col-span-2'>
-            <div className="flex flex-col gap-3">
-            <label>Select Course</label>
-            <select
-                className="input-field"
-                value=""
-                onChange={(e) => {
-                    if(!courseList.includes(e.target.value)){
-
-                        setCourseList([...courseList, e.target.value])}
-
-                    }
-                }
-                    
-                   
-            >
-                <option value="">Select Course</option>
-                {courses?.map((course, index) => (
-                <option key={index} value={course.course_id}>
-                    {course.course_id} {course.course_name}
-                </option>
-                ))}
-            </select>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-2">
-                {courseList.map((course, index) => (
-                    <button
-                    type='button'
-                    key={index}
-                    onClick={() => {
-                        setCourseList(courseList.filter((c) => c !== course)); // Filter out the clicked course
-                    }}
-                    className="flex items-center gap-2 border border-gray-300 rounded-lg px-2 py-1 bg-gray-100"
-                    >
-                    {course} <FaTimes size={14} /> 
-                    </button>
-                ))}
-            </div>
-            
-           
-            </div>
           
 
         

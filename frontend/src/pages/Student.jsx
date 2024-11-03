@@ -126,7 +126,7 @@ const Student = () => {
       </div>
       
       ))}
-      {currentPage+3<courses?.length && (
+      {currentPage+4<courses?.length && (
         <button  className="text-gray-500 hover:text-gray-700" onClick={()=> setCurrentPage(currentPage+4)}>
           <FaChevronRight size={24} />
         </button>

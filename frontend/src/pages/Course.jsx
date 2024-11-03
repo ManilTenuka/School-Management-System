@@ -118,12 +118,12 @@ const Course = () => {
               </tr>
             </thead>
             <tbody className="text-gray-700 text-sm">
-              {students.map((student, index) => (
+              {teachers.map((teacher, index) => (
                 <tr key={index} className="border-b hover:bg-gray-100">
-                  <td className="py-2 px-4 text-center">{student.id}</td>
-                  <td className="py-2 px-4 text-center">{student.first_name} {student.last_name}</td>
+                  <td className="py-2 px-4 text-center">{teacher.teacher_id}</td>
+                  <td className="py-2 px-4 text-center">{teacher.first_name} {teacher.last_name}</td>
                   <td className="py-2 px-4 text-center flex gap-2 justify-center">
-                    <button onClick={() => navigate(`/admin/student/${student.id}`)} className="text-blue-500 hover:text-blue-700">
+                    <button onClick={() => navigate(`/admin/teacher/${teacher.teacher_id}`)} className="text-blue-500 hover:text-blue-700">
                       <FaEye size={18} title="View" />
                     </button>
                     
