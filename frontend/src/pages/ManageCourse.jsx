@@ -65,15 +65,16 @@ const ManageCourse = () => {
         <div className="flex flex-col justify-center py-4 items-center gap-5">
             <div>
                 <div className='mt-10 flex gap-12'>
-                    <button className="flex flex-col items-center justify-center w-32 h-32 bg-blue-900 text-white rounded-md hover:bg-blue-700 transition duration-200" onClick={() => {
-                        setModelOpen(isModalOpen === false ? true : false)
-                    }}>
-                        <FaPen size={24} />
-                        <span className="mt-2 text-lg">Add Course</span>
-                    </button>
+                   
                     <div className='flex items-center'>
                         <Search data={courses} onSearch={handleSearchResults} type={'c'}/>
                     </div>
+                    <button className="flex flex-col items-center justify-center w-16 h-16 bg-blue-900 text-white rounded-lg hover:bg-blue-700 transition duration-200 p-3" onClick={() => {
+                        setModelOpen(isModalOpen === false ? true : false)
+                    }}>
+                        <FaPlus size={20} />
+                        <span className="mt-1 text-sm">Add </span>
+                    </button>
                 </div>
             </div>
 
@@ -108,7 +109,7 @@ const ManageCourse = () => {
                                     </button>
                                     <button>
                                         <FaEye size={18} title="View" onClick={() => {
-                                            navigate(`/admin/course/${course.id}`)
+                                            navigate(`/admin/course/${course.course_id}`)
                                         }} />
                                     </button>
                                     <button onClick={() => {
