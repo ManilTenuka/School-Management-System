@@ -11,7 +11,8 @@ const StudentForm = ({onClose , onChange}) => {
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
       };
-    
+    const [courseList, setCourseList] = useState([]) 
+    const [courses, setCourses] = useState([]);
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -35,7 +36,22 @@ const StudentForm = ({onClose , onChange}) => {
             setProfileImage(URL.createObjectURL(file)); // Update the preview with selected image
         }
     };
-
+    
+    useEffect(() => {
+      
+        axios.get('http://localhost:3001/admin/getAllCourses')
+          .then((response) => {
+            setCourses(response.data); 
+            
+          })
+          .catch((error) => {
+            console.error('Error fetching courses:', error);
+            
+          });
+  
+          
+      },[]);
+      
 
     const handleSubmit = async (e) => {
          // New state for profile image preview
@@ -55,7 +71,8 @@ const StudentForm = ({onClose , onChange}) => {
           birthday,
           gender,
           address,
-          birthCertificate: birthCertificate 
+          birthCertificate: birthCertificate ,
+          courseList
         };
         if (!firstName) {
             setIsErrorFirstName(true);
@@ -215,6 +232,49 @@ const StudentForm = ({onClose , onChange}) => {
               onChange={(e) => setBirthCertificate(e.target.files[0])}
             />
           </div>
+
+          <div className='flex  gap-3 col-span-2'>
+            <div className="flex flex-col gap-3">
+            <label>Select Course</label>
+            <select
+                className="input-field"
+                value=""
+                onChange={(e) => {
+                    if(!courseList.includes(e.target.value)){
+
+                        setCourseList([...courseList, e.target.value])}
+
+                    }
+                }
+                    
+                   
+            >
+                <option value="">Select Course</option>
+                {courses.map((course, index) => (
+                <option key={index} value={course.course_id}>
+                    {course.course_id} {course.course_name}
+                </option>
+                ))}
+            </select>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-2">
+                {courseList.map((course, index) => (
+                    <button
+                    key={index}
+                    onClick={() => {
+                        setCourseList(courseList.filter((c) => c !== course)); // Filter out the clicked course
+                    }}
+                    className="flex items-center gap-2 border border-gray-300 rounded-lg px-2 py-1 bg-gray-100"
+                    >
+                    {course} <FaTimes size={14} /> {/* Cancel icon */}
+                    </button>
+                ))}
+            </div>
+            
+           
+            </div>
+
 
         
         </div>

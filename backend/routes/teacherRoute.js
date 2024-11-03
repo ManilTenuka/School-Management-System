@@ -8,7 +8,7 @@ router.delete('/deleteTeacher/:teacherId', teacherController.deleteTeacher);
 router.put('/updateTeacher/:teacherId', teacherController.updateTeacher);
 router.get('/getCourseIdForTeacher/:teacherId', teacherController.getCourseIdForTeacher);
 router.delete('/deleteTeacherCourse', teacherController.deleteTeacherCourse);
-router.post('/CreateTeacherCourseTable',teacherController.CreateTeacherCourseTable);
+router.post('/createTeacherCourseTable',teacherController.CreateTeacherCourseTable);
 
 
 

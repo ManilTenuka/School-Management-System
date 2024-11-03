@@ -1,6 +1,6 @@
 // src/pages/ManageStudents.jsx
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { FaEdit, FaCopy, FaTrash , FaPlus , FaPen , FaEye} from 'react-icons/fa';
 import Search from '../components/Search';
@@ -9,45 +9,44 @@ import StudentForm from '../components/manageStudents/StudentForm';
 import EditForm from '../components/manageStudents/EditForm';
 
 const ManageStudents = () => {
+
     const navigate = useNavigate();
     const [students, setStudents] = useState([]);
     const [error, setError] = useState(null);
-
+    const [filteredStudents, setFilteredStudents] = useState([]); 
     const [isModalOpen, setModelOpen] = useState(false);
-    const [isEditFormOpen , setEditFormOpen] = useState([false,null]);
+    const [isEditFormOpen , setEditFormOpen] = useState([false, null]);
     const [changed, setChanged] = useState(false);
+
+    const handleSearchResults = useCallback((results) => {
+      setFilteredStudents(results);
+    }, []);
+
     useEffect(() => {
-      
       axios.get('http://localhost:3001/admin/getAllStudents')
         .then((response) => {
           setStudents(response.data); 
-          
+          setFilteredStudents(response.data);
         })
         .catch((error) => {
           console.error('Error fetching students:', error);
           setError('Failed to fetch students');
         });
 
-        setChanged(false)
+        setChanged(false);
     }, [changed]);
-  
+
     if (error) {
       return <div>Error: {error}</div>;
     }
 
-    console.log("students : " + students.student_id);
-
-    const handleDelete = async(studentId)=>{
-
+    const handleDelete = async(studentId) => {
       try {
         const response = await axios.delete(`http://localhost:3001/admin/deleteStudent/${studentId}`);
         console.log(response.data.message); 
-      
       } catch (error) {
           console.error('Error deleting student:', error);
       }
-
-
     }
 
     const calculateAge = (birthday) => {
@@ -56,7 +55,6 @@ const ManageStudents = () => {
       let age = today.getFullYear() - birthDate.getFullYear();
       const monthDifference = today.getMonth() - birthDate.getMonth();
       
-      
       if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
           age--;
       }
@@ -64,21 +62,23 @@ const ManageStudents = () => {
   };
 
   return (
-   
     <div className="flex flex-col justify-center py-4 items-center gap-5">
         <div>
-        <div className='mt-10 flex gap-12'>
-        <button className="flex flex-col items-center justify-center w-32 h-32  bg-blue-900 text-white rounded-md hover:bg-blue-700 transition duration-200" onClick={()=>{
-
-                 setModelOpen(isModalOpen==false?true:false)
-        }
-        }>
-            <FaPen size={24} /> 
-            <span className="mt-2 text-lg">Add Student</span>
-        </button>
+        <div className='mt-6 mb-6 flex gap-12'>
+        
         <div className='flex items-center'>
-          <Search></Search>
+        <Search data={students} onSearch={handleSearchResults} type = {"s"} />
         </div>
+        <button
+            className="flex flex-col items-center justify-center w-16 h-16 bg-blue-900 text-white rounded-lg hover:bg-blue-700 transition duration-200 p-3"
+            onClick={() => {
+              setModelOpen(!isModalOpen);
+            }}
+          >
+            <FaPlus size={20} /> 
+            <span className="mt-1 text-sm">Add</span>
+        </button>
+
         </div>
         
         </div>
@@ -106,7 +106,7 @@ const ManageStudents = () => {
                 </tr>
             </thead>
             <tbody className="text-gray-700 text-sm">
-            {students.map((student, index) => (
+            {filteredStudents.map((student, index) => (
               <tr key={index} className="border-b hover:bg-gray-100">
                 <td className="py-2 px-4 text-center">{student.id}</td>
                 <td className="py-2 px-4 text-center">{student.first_name} {student.last_name}</td>
@@ -133,11 +133,8 @@ const ManageStudents = () => {
               </tr>
             ))}
             </tbody>
-
         </table>
         </div>
-       
-
     </div>
   );
 };

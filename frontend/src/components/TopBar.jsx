@@ -2,11 +2,11 @@ import { Input } from 'postcss'
 import React from 'react'
 import Search from './Search'
 import logo from '../assests/1.avif'
-const TopBar = () => {
+const TopBar = ({str}) => {
   return (
-    <div className='relative flex justify-center'>
+    <div className='relative flex '>
         <div>
-        <h1 className="text-2xl font-semibold text-gray-800">Manage Students</h1>
+        <h1 className="text-2xl font-semibold text-gray-800 pt-3">School Management System</h1>
         </div>
      
         <div className="absolute right-10">
