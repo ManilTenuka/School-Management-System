@@ -4,9 +4,9 @@ import Search from './Search'
 import logo from '../assests/1.avif'
 const TopBar = ({str}) => {
   return (
-    <div className='relative flex justify-left'>
+    <div className='relative flex '>
         <div>
-        <h1 className="text-2xl font-semibold text-gray-800">School Management System</h1>
+        <h1 className="text-2xl font-semibold text-gray-800 pt-3">School Management System</h1>
         </div>
      
         <div className="absolute right-10">

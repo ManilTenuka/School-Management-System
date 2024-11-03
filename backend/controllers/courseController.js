@@ -76,26 +76,65 @@ exports.deleteCourse = (req, res) => {
         }
     });
 };
-
-exports.getCourseIdForTeacher = (req, res) => {
-    const teacherId = req.params.teacherId;
-
+//students who have enrolled in a particular course
+exports.getStudentInfo = (req,res) => {
+    const  courseId = req.params.courseId ;
     const query = `
-        SELECT course_id 
-        FROM teacher_courses 
-        WHERE teacher_id = ?`;
+        SELECT students.*
+        FROM students
+        JOIN student_courses ON students.id = student_courses.student_id
+        JOIN courses ON student_courses.course_id = courses.course_id
+        WHERE courses.course_id = ?;
+        `;
 
-    db.query(query, [teacherId], (err, results) => {
+
+        db.query(query, [courseId], (err, results) => {
         if (err) {
-            console.error('Error fetching courses for teacher:', err);
-            res.status(500).json({ error: 'Failed to retrieve courses for the teacher' });
-        } else if (results.length === 0) {
-            res.status(404).json({ message: 'No courses found for this teacher' });
+            console.error("Error fetching students for the course:", err);
+            res.status(500).json({ error: "Failed to retrieve students for the course" });
         } else {
-            res.status(200).json(results.map(result => result.course_id)); // Return only course IDs
+            res.status(200).json(results);
+        }
+    });
+
+}
+
+exports.getCourseById = (req, res) => {
+    const courseId = req.params.courseId;
+
+    const query = "SELECT * FROM courses where course_id = ? ";
+    
+    db.query(query, [courseId], (err, results) => {
+        if (err) {
+            console.error('Error fetching Courses details:', err);
+            res.status(500).json({ error: 'Failed to retrieve Courses details' });
+        } else if (results.length === 0) {
+            res.status(404).json({ message: 'Courses not found' });
+        } else {
+            res.status(200).json(results[0]); 
         }
     });
 };
 
+//Teachers who have enrolled in a particular course
+exports.getTeacherInfo = (req, res) => {
+    const courseId = req.params.courseId;
+    const query = `
+        SELECT teachers.*
+        FROM teachers
+        JOIN teacher_courses ON teachers.teacher_id = teacher_courses.teacher_id
+        JOIN courses ON teacher_courses.course_id = courses.course_id
+        WHERE courses.course_id = ?;
+    `;
+
+    db.query(query, [courseId], (err, results) => {
+        if (err) {
+            console.error("Error fetching teachers for the course:", err);
+            res.status(500).json({ error: "Failed to retrieve teachers for the course" });
+        } else {
+            res.status(200).json(results);
+        }
+    });
+};
 
 

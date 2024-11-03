@@ -62,15 +62,17 @@ const ManageTeachers = () => {
       <div className="flex flex-col justify-center py-4 items-center gap-5">
         <div>
           <div className='mt-10 flex gap-12'>
-            <button className="flex flex-col items-center justify-center w-32 h-32 bg-blue-900 text-white rounded-md hover:bg-blue-700 transition duration-200" onClick={() => {
-              setModelOpen(!isModalOpen);
-            }}>
-              <FaPen size={24} />
-              <span className="mt-2 text-lg">Add Teacher</span>
-            </button>
+            
             <div className='flex items-center'>
               <Search data={teachers} onSearch={handleSearchResults} />
             </div>
+
+            <button className="flex flex-col items-center justify-center w-16 h-16 bg-blue-900 text-white rounded-lg hover:bg-blue-700 transition duration-200 p-3" onClick={() => {
+              setModelOpen(!isModalOpen);
+            }}>
+              <FaPlus size={20} />
+              <span className="mt-1 text-sm">Add </span>
+            </button>
           </div>
         </div>
         {isModalOpen && (

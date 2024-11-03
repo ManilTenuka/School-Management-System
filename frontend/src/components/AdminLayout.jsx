@@ -16,8 +16,8 @@ const AdminLayout = () => {
       </div>
 
      
-      <div className="w-5/6 p-6 ml-[16.666%]">
-        <div>
+      <div className="w-5/6 p-6 ml-[16.666%] ">
+        <div className='pb-5 border-b-2'>
             <TopBar></TopBar>
         </div>
         <div className='mt-10'>
