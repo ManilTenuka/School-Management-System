@@ -3,12 +3,29 @@ import { FaTimes } from 'react-icons/fa'
 import { useState } from 'react';
 import axios from 'axios';
 const EditForm = ({onClose , student}) => {
-
+      
+    const[courseList,setCourseList] = useState([]);
+    const[courses,setCourses] = useState([]);
     const formatDate = (isoDate) => {
         const date = new Date(isoDate);
         return date.toISOString().split("T")[0]; // Extracts the "yyyy-MM-dd" part
       };
     
+      useEffect(() => {
+        Promise.all([
+            axios.get('http://localhost:3001/admin/getAllCourses'),
+            axios.get(`http://localhost:3001/admin/getCourseIdForStudent/${student.id}`)
+        ])
+        .then(([allCoursesResponse, studentCoursesResponse]) => {
+            setCourses(allCoursesResponse.data); 
+            setCourseList(studentCoursesResponse.data); 
+        })
+        .catch((error) => {
+            console.error('Error fetching courses:', error);
+        });
+    }, []);
+
+    console.log("courses : " + courseList)
 
     const [firstName, setFirstName] = useState(student.first_name);
     const [lastName, setLastName] = useState(student.last_name);
@@ -51,7 +68,8 @@ const EditForm = ({onClose , student}) => {
           birthday,
           gender,
           address,
-          birthCertificate: birthCertificate 
+          birthCertificate: birthCertificate ,
+          courseList
         };
         if (!firstName) {
             setIsErrorFirstName(true);
@@ -92,15 +110,28 @@ const EditForm = ({onClose , student}) => {
             return
           }
       
-        console.log('Student Data:', studentData);
+        console.log('Student Data:', student.id);
       
         try {
-            const response = await axios.put(`http://localhost:3001/admin/updateStudent/${student.id}`, studentData);
-            console.log('Student updated:', response.data);
-            onClose(); 
-          } catch (error) {
-            console.error('Error updating student:', error);
-          }
+            const updateResponse = await axios.put(`http://localhost:3001/admin/updateStudent/${student.id}`, studentData);
+            console.log('Student updated:', updateResponse.data);
+        
+            const deleteResponse = await axios.delete(`http://localhost:3001/admin/deleteStudentCourse`, {
+                data: { studentId: student.id, courseList }
+            });
+            console.log('Deleted courses:', deleteResponse.data);
+        
+            const updateStudentCourseResponse = await axios.post(`http://localhost:3001/admin/createStudentCourseTable`, {
+                studentId: student.id,
+                courseList
+            });
+
+            console.log('updated Courses:', updateStudentCourseResponse.data);
+            
+            onClose();
+        } catch (error) {
+            console.error('Error updating Student or updating courses:', error);
+        }
         };
       
 
@@ -210,6 +241,51 @@ const EditForm = ({onClose , student}) => {
               onChange={(e) => setBirthCertificate(e.target.files[0])}
             />
           </div>
+
+          
+          <div className='flex  gap-3 col-span-2'>
+            <div className="flex flex-col gap-3">
+            <label>Select Course</label>
+            <select
+                className="input-field"
+                value=""
+                onChange={(e) => {
+                    if(!courseList.includes(e.target.value)){
+
+                        setCourseList([...courseList, e.target.value])}
+
+                    }
+                }
+                    
+                   
+            >
+                <option value="">Select Course</option>
+                {courses?.map((course, index) => (
+                <option key={index} value={course.course_id}>
+                    {course.course_id} {course.course_name}
+                </option>
+                ))}
+            </select>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-2">
+                {courseList.map((course, index) => (
+                    <button
+                    type='button'
+                    key={index}
+                    onClick={() => {
+                        setCourseList(courseList.filter((c) => c !== course)); // Filter out the clicked course
+                    }}
+                    className="flex items-center gap-2 border border-gray-300 rounded-lg px-2 py-1 bg-gray-100"
+                    >
+                    {course} <FaTimes size={14} /> 
+                    </button>
+                ))}
+            </div>
+            
+           
+            </div>
+          
 
         
         </div>
