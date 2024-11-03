@@ -1,13 +1,15 @@
 import './App.css';
 import Router from './router/Router';
 import { RouterProvider } from 'react-router-dom';
+import { AuthProvider } from './pages/authentication/AuthProvider';
 
 function App() {
   return (
-    <div>
-  
-      <RouterProvider router={Router} />
-    </div>
+    <AuthProvider>
+      <div>
+        <RouterProvider router={Router} />
+      </div>
+    </AuthProvider>
   );
 }
 

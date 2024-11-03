@@ -11,5 +11,6 @@ router.put('/updateStudent/:studentId', studentController.updateStudent);
 router.get('/getCourseIdForStudent/:studentId', studentController.getCourseIdForStudent);
 router.delete('/deleteStudentCourse', studentController.deleteStudentCourse);
 router.post('/createStudentCourseTable',studentController.createStudentCourseTable);
+router.get('/getCourseByStudentId/:studentId',studentController.getCoursesByStudentId);
 
 module.exports = router;

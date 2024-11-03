@@ -1,4 +1,3 @@
-// src/router/Router.jsx
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -10,43 +9,80 @@ import ManageTeachers from '../pages/ManageTeachers';
 import Teacher from '../pages/Teacher';
 import ManageCourse from '../pages/ManageCourse';
 import Course from '../pages/Course';
-
+import Login from '../pages/Login';
+import ProtectedRoute from '../pages/authentication/ProtectedRoute';
 
 const Router = createBrowserRouter([
   {
-    path: "/admin",
-    element: <AdminLayout/>, 
+    path: '/',
+    element: <Login />,
+  },
+  {
+    path: '/admin',
+    element: (
+      <ProtectedRoute>
+        <AdminLayout />
+      </ProtectedRoute>
+    ), // Protect the entire AdminLayout
     children: [
       {
-        path: "adminDashboard", 
-        element: <AdminDashboard />
+        path: 'adminDashboard',
+        element: (
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: "manageStudents", 
-        element: <ManageStudents />
+        path: 'manageStudents',
+        element: (
+          <ProtectedRoute>
+            <ManageStudents />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: "student/:studentId", 
-        element: <Student/>
+        path: 'student/:studentId',
+        element: (
+          <ProtectedRoute>
+            <Student />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: "manageTeachers", 
-        element: <ManageTeachers/>
+        path: 'manageTeachers',
+        element: (
+          <ProtectedRoute>
+            <ManageTeachers />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: "teacher/:teacherId", 
-        element: <Teacher/>
+        path: 'teacher/:teacherId',
+        element: (
+          <ProtectedRoute>
+            <Teacher />
+          </ProtectedRoute>
+        ),
       },
       {
-        path:"manageCourses",
-        element:<ManageCourse/>
+        path: 'manageCourses',
+        element: (
+          <ProtectedRoute>
+            <ManageCourse />
+          </ProtectedRoute>
+        ),
       },
       {
-        path:"course/:courseId",
-        element:<Course/>
-      }
-    ]
-  }
+        path: 'course/:courseId',
+        element: (
+          <ProtectedRoute>
+            <Course />
+          </ProtectedRoute>
+        ),
+      },
+    ],
+  },
 ]);
 
 export default Router;
