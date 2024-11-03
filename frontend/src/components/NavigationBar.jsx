@@ -3,8 +3,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MdDashboard, MdSchool, MdPerson, MdClass, MdSchedule   } from 'react-icons/md';
 import { IoIosLogOut } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../pages/authentication/AuthProvider';
 
 const NavigationBar = () => {
+
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout(); 
+    navigate('/'); 
+  };
+
   return (
     <nav className="flex flex-col justify-between items-center h-screen p-4 bg-gray-800 text-white">
     <div className="flex flex-col gap-10 items-center mt-20">
@@ -28,16 +39,13 @@ const NavigationBar = () => {
         <Link to="manageCourses">Manage Courses</Link>
       </div>
       
-      <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-700 hover:text-gray-200 transition-all duration-200 ease-in-out">
-        <MdSchedule size={20} />
-        <Link to="manageSchedule">Manage Schedule</Link>
-      </div>
+      
       
     </div>
      
     <div className="flex items-center gap-2 cursor-pointer mb-8">
         <IoIosLogOut size={20} />
-        <Link to="logout">Logout</Link>
+        <Link  onClick={handleLogout}>Logout</Link>
     </div>
   </nav>
   

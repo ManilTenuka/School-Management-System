@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { useState } from 'react';
 import axios from 'axios';
-const EditForm = ({onClose , student}) => {
+const EditForm = ({onClose , student , onChange}) => {
       
     const[courseList,setCourseList] = useState([]);
     const[courses,setCourses] = useState([]);
@@ -127,7 +127,7 @@ const EditForm = ({onClose , student}) => {
             });
 
             console.log('updated Courses:', updateStudentCourseResponse.data);
-            
+            onChange();
             onClose();
         } catch (error) {
             console.error('Error updating Student or updating courses:', error);
@@ -232,16 +232,6 @@ const EditForm = ({onClose , student}) => {
             <h1 className='text-red-600'>This field is mandatory</h1>
              )}
           </div>
-
-          <div className="flex flex-col gap-3 col-span-2">
-            <label>Birth Certificate Document</label>
-            <input
-              type="file"
-              className="input-field"
-              onChange={(e) => setBirthCertificate(e.target.files[0])}
-            />
-          </div>
-
           
           <div className='flex  gap-3 col-span-2'>
             <div className="flex flex-col gap-3">

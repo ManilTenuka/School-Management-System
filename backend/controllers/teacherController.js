@@ -177,3 +177,49 @@ exports.CreateTeacherCourseTable = (req, res) => {
     });
 };
 
+
+exports.getCoursesByTeacherId = (req, res) => {
+    const { teacherId } = req.params; // Retrieve teacher ID from URL parameters
+
+    const query = `
+        SELECT courses.*
+        FROM courses
+        JOIN teacher_courses ON courses.course_id = teacher_courses.course_id
+        WHERE teacher_courses.teacher_id = ?;
+    `;
+
+    db.query(query, [teacherId], (err, results) => {
+        if (err) {
+            console.error("Error fetching courses for the teacher:", err);
+            return res.status(500).json({ error: "Failed to retrieve courses for the teacher" });
+        }
+
+        if (results.length === 0) {
+            return res.status(200).json({ message: "No courses found for this teacher" });
+        }
+
+        res.status(200).json(results); // Return the courses associated with the teacher
+    });
+};
+
+
+exports.getTeacherDetails = (req, res) => {
+    const teacherId = req.params.teacherId;
+
+    const query = "SELECT * FROM teachers where teacher_id = ? ";
+    
+    db.query(query, [teacherId], (err, results) => {
+        if (err) {
+            console.error('Error fetching teacher details:', err);
+            res.status(500).json({ error: 'Failed to retrieve teacher details' });
+        } else if (results.length === 0) {
+            res.status(200).json([]);
+        } else {
+            res.status(200).json(results[0]); 
+        }
+    });
+};
+
+
+
+

@@ -103,7 +103,7 @@ const ManageTeachers = () => {
                     <button onClick={() => setEditFormOpen([!isEditFormOpen[0], teacher])}>
                       <FaEdit size={18} title="Edit" />
                     </button>
-                    <button onClick={() => navigate(`/admin/teacher/${teacher.id}`)}>
+                    <button onClick={() => navigate(`/admin/teacher/${teacher.teacher_id}`)}>
                       <FaEye size={18} title="View" />
                     </button>
                     <button onClick={() => {
